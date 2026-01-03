@@ -5,14 +5,13 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
                              QHBoxLayout, QPushButton, QSlider, QLabel, QListWidget, 
                              QFileDialog, QMessageBox, QListWidgetItem, QInputDialog,
                              QMenuBar, QMenu, QAction, QSplitter)
-from PyQt5.QtCore import Qt, QUrl, QTimer
+from PyQt5.QtCore import Qt, QUrl
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QMediaPlaylist
 from mutagen import File as MutagenFile
 from mutagen.id3 import ID3, APIC
 from mutagen.mp3 import MP3
 from mutagen.flac import FLAC
-import io
 
 
 class MusicPlayer(QMainWindow):
