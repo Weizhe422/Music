@@ -486,7 +486,14 @@ void MusicPlayer::loadAlbumCover(const QString &filePath)
         // No cover found
         coverLabel->setText("無封面");
         coverLabel->setPixmap(QPixmap());
+    } catch (const std::exception &e) {
+        // Log specific error for debugging
+        qWarning() << "Error loading album cover:" << e.what();
+        coverLabel->setText("無法載入封面");
+        coverLabel->setPixmap(QPixmap());
     } catch (...) {
+        // Catch any other exceptions
+        qWarning() << "Unknown error loading album cover for:" << filePath;
         coverLabel->setText("無法載入封面");
         coverLabel->setPixmap(QPixmap());
     }
@@ -556,7 +563,19 @@ void MusicPlayer::parseLyricsFile(const QString &filePath)
                         int minutes = parts[0].toInt();
                         QStringList secondsParts = parts[1].split('.');
                         int seconds = secondsParts[0].toInt();
-                        int milliseconds = secondsParts.size() > 1 ? secondsParts[1].toInt() * 10 : 0;
+                        int milliseconds = 0;
+                        if (secondsParts.size() > 1) {
+                            // LRC format uses centiseconds (hundredths of a second)
+                            // Pad or trim to 2 digits and multiply by 10 to get milliseconds
+                            QString centiseconds = secondsParts[1];
+                            if (centiseconds.length() == 1) {
+                                milliseconds = centiseconds.toInt() * 100; // 1 digit: x -> xx0 ms
+                            } else if (centiseconds.length() == 2) {
+                                milliseconds = centiseconds.toInt() * 10;  // 2 digits: xx -> xx0 ms
+                            } else {
+                                milliseconds = centiseconds.left(2).toInt() * 10; // 3+ digits: use first 2
+                            }
+                        }
                         
                         qint64 totalMs = (minutes * 60 + seconds) * 1000 + milliseconds;
                         

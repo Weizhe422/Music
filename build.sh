@@ -135,7 +135,14 @@ cmake ..
 
 echo ""
 echo "執行編譯..."
-cmake --build . -j$(nproc)
+# Use nproc on Linux, sysctl on macOS, or fallback to parallel build
+if command -v nproc &> /dev/null; then
+    cmake --build . -j$(nproc)
+elif command -v sysctl &> /dev/null; then
+    cmake --build . -j$(sysctl -n hw.ncpu)
+else
+    cmake --build . --parallel
+fi
 
 echo ""
 echo "========================================="
