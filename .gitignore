@@ -76,3 +76,19 @@ Thumbs.db
 
 # debug information files
 *.dwo
+
+# Qt C++ build artifacts
+build/
+build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.pro.user
+*.pro.user.*
+moc_*.cpp
+moc_*.h
+qrc_*.cpp
+ui_*.h
+*.autosave
+MusicPlayer
